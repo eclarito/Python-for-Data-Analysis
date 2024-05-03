@@ -1,0 +1,70 @@
+# Handling Data
+import pandas as pd
+
+# Creating a Series by passing in a list
+items = pd.Series(['chairs', 'labels', 'tables'])
+
+# Creating a Series by passing in a list with the index
+items = pd.Series(['Chairs', 'labels', 'tables'], index = ['OR 001', 'OR 002', 'OR 003'])
+
+# Creating a Series by passing in a list without the Index
+names = pd.Series(['Joe', 'Tom', 'Jane'])
+
+# Creating a DataFrame
+dframe = {'Name' : ['Joe', 'Tom', 'Jane'], 'Items' : ['chairs', 'labels', 'tables']}
+purchases = pd.DataFrame(dframe)
+
+# Loading a CSV file into a DataFrame and basic methods for investigating / viewing a DataFrame
+mdata = pd.read_csv('Marketing.csv')
+
+#runs the first 5 rows
+mdata.head()
+
+#runs the number of rows you select
+mdata.head(10)
+
+# Displays the last 5 rows
+mdata.tail()
+
+# Displays the last N number of rows
+mdata.tail(2)
+
+# Displays the first 5 rows and the information of the dataframe
+mdata.info()
+mdata.head()
+
+# Displays the shape, number of columns and rows in the data
+mdata.shape
+
+# Displays the null values of the Data column
+mdata[mdata['Date'].isna()]
+
+# Removes the null values of the Data column
+mdata = mdata.dropna()
+mdata.isnull().sum()
+
+# Displays the summary statistics for all numeric columns
+mdata.describe()
+
+# Displays the summary of a nominal data
+mdata['Day_Name'].describe()
+
+# Select all the data when the day is Monday & Promo = "No Promo"
+# exmp 1 - 2 conditions
+mdata[(mdata['Day_Name'] == "Monday") & (mdata['Promo'] == 'No Promo')]
+
+#Sort values by revenue in descending order so top 5 values are at top of the table
+mdata = mdata.sort_values(by = 'Revenue', ascending = False)
+mdata.head()
+
+# Sum of Revenue by Day Name
+# option 1 - series
+mdata.groupby('Day_Name')['Revenue'].sum()
+
+# Sum of Revenue by Day Name
+# option 2 - dataframe
+mdata.groupby('Day_Name', as_index = False).agg({'Revenue':'sum'})
+
+# Revenue per Spend
+mdata['Revenue per Spend'] = mdata['Revenue'] / mdata['Marketing Spend']
+mdata.head()
